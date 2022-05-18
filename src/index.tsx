@@ -1,19 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.scss';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { StrictMode } from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+import App from "./App";
+import AppContextProvider from "./context/AppContextProvider";
+import errorReducer from "./context/reducers/error/error-reducer";
+import userReducer from "./context/reducers/user/historical-reducer";
+import { initialGlobalState } from "./context/store";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+export const reducers = {
+  user: userReducer,
+  error: errorReducer
+};
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const rootElement = document.getElementById("root");
+ReactDOM.render(
+  <StrictMode>
+    <Router>
+      <AppContextProvider
+        reducers={reducers}
+        initialGlobalState={initialGlobalState}
+      >
+        <App />
+      </AppContextProvider>
+    </Router>
+  </StrictMode>,
+  rootElement
+);
