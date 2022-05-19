@@ -1,27 +1,32 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import errorActions from '../../context/reducers/error/error-actions';
 import historicalActions from '../../context/reducers/user/historical-actions';
 import AppContext from '../../context/store';
+import config from '../../common/config';
+import { IHistoricalData } from '../../common/types/historical';
+import { IResponseTemplate } from '../../common/types/response-template';
 
 const Historical = () => {
   const [
     {
-      historical: { historicalReplies },
       error: { errors }
     },
     dispatch
   ] = useContext(AppContext);
+  const [historicalData, setHistoricalData] = useState<IHistoricalData>();
 
   useEffect(() => {
     setTimeout(() => {
-      fetch("https://api.github.com/users")
-        .then((response) => response.json())
-        .then((users) => {
-          debugger;
-          dispatch({ type: historicalActions.SET_HISTORICAL_DATA , payload: users });
+      fetch(`${config.backendUrl}/api/historicalData/?aggregationInterval=0`)
+        .then((response) => {
+          return response.json()
+        })
+        .then((responseTemplate: IResponseTemplate<IHistoricalData>) => {
+          //dispatch({ type: historicalActions.SET_HISTORICAL_DATA, payload: responseTemplate.Content });
+          setHistoricalData(responseTemplate.Content);
         })
         .catch((error) => {
-          debugger;
+
           dispatch({ type: errorActions.SET_ERROR, payload: error });
         });
     }, 2000);
@@ -35,12 +40,15 @@ const Historical = () => {
     );
   }
 
-  if (historicalReplies && historicalReplies.length > 0) {
+  if (historicalData) {
     return (
       <>
-        {historicalReplies.map((post: any) => (
-          <div key={post.id}>{post.login}</div>
-        ))}
+          <div>
+            <p>Close: {historicalData.Close}</p>
+            <p>Open: {historicalData.Open}</p>
+            <p>Daily High: {historicalData.DailyHigh}</p>
+            <p>Daily Low: {historicalData.DailyLow}</p>
+          </div>
       </>
     );
   }
