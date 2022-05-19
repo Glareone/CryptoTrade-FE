@@ -11,12 +11,13 @@ const userReducer: Reducer<IHistoricalState, IFluxAction> = (
     case historicalActions.SET_HISTORICAL_DATA:
       return {
         ...state,
-        historicalReplies: action.payload,
+        
+        historicalData: action.payload,
       }
     case historicalActions.CLEAR_HISTORICAL_DATA:
       return {
         ...state,
-        historicalReplies: null,
+        historicalData: null,
       }
     default:
       return state;

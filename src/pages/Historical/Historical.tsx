@@ -2,11 +2,14 @@ import React, { useEffect, useContext } from 'react';
 import errorActions from '../../context/reducers/error/error-actions';
 import historicalActions from '../../context/reducers/user/historical-actions';
 import AppContext from '../../context/store';
+import config from '../../common/config';
+import { IHistoricalData } from '../../common/types/historical';
+import { IResponseTemplate } from '../../common/types/response-template';
 
 const Historical = () => {
   const [
     {
-      historical: { historicalReplies },
+      historical: { historicalData },
       error: { errors }
     },
     dispatch
@@ -14,11 +17,14 @@ const Historical = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      fetch("https://api.github.com/users")
-        .then((response) => response.json())
-        .then((users) => {
+      fetch(`${config.backendUrl}/api/historicalData/?aggregationInterval=0`)
+        .then((response) => {
           debugger;
-          dispatch({ type: historicalActions.SET_HISTORICAL_DATA , payload: users });
+          return response.json()
+        })
+        .then((responseTemplate: IResponseTemplate<IHistoricalData>) => {
+          debugger;
+          dispatch({ type: historicalActions.SET_HISTORICAL_DATA , payload: responseTemplate.Content });
         })
         .catch((error) => {
           debugger;
@@ -35,12 +41,15 @@ const Historical = () => {
     );
   }
 
-  if (historicalReplies && historicalReplies.length > 0) {
+  if (historicalData) {
     return (
       <>
-        {historicalReplies.map((post: any) => (
-          <div key={post.id}>{post.login}</div>
-        ))}
+          <div>
+            <p>$`Close: {historicalData.Close}`</p>
+            <p>$`Open: {historicalData.Open}`</p>
+            <p>$`Daily High: {historicalData.DailyHigh}`</p>
+            <p>$`Daily Low: {historicalData.DailyLow}`</p>
+          </div>
       </>
     );
   }

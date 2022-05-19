@@ -1,7 +1,7 @@
 export interface IHistoricalReply {}
 
 export interface IHistoricalState {
-  historicalReplies?: Array<IHistoricalReply>;
+  historicalData?: IHistoricalReply;
 }
 
 const historicalInitialState: IHistoricalState = {};
