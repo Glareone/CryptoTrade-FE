@@ -1,9 +1,9 @@
 import { createContext } from "react";
 import errorInitialState, { IErrorState } from "./error-state";
-import historicalInitialState, { IHistoricalReply } from "./historical-state";
+import historicalInitialState, { IHistoricalState } from "./historical-state";
 
 export interface IGlobalState {
-  historical: IHistoricalReply;
+  historical: IHistoricalState;
   error: IErrorState;
 }
 

@@ -1,7 +1,7 @@
-export interface IHistoricalReply {}
+import { IHistoricalData } from "../../common/types/historical";
 
 export interface IHistoricalState {
-  historicalData?: IHistoricalReply;
+  historicalData?: IHistoricalData;
 }
 
 const historicalInitialState: IHistoricalState = {};

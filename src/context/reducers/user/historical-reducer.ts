@@ -11,7 +11,6 @@ const userReducer: Reducer<IHistoricalState, IFluxAction> = (
     case historicalActions.SET_HISTORICAL_DATA:
       return {
         ...state,
-        
         historicalData: action.payload,
       }
     case historicalActions.CLEAR_HISTORICAL_DATA:

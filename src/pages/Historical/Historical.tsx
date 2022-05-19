@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import errorActions from '../../context/reducers/error/error-actions';
 import historicalActions from '../../context/reducers/user/historical-actions';
 import AppContext from '../../context/store';
@@ -9,25 +9,24 @@ import { IResponseTemplate } from '../../common/types/response-template';
 const Historical = () => {
   const [
     {
-      historical: { historicalData },
       error: { errors }
     },
     dispatch
   ] = useContext(AppContext);
+  const [historicalData, setHistoricalData] = useState<IHistoricalData>();
 
   useEffect(() => {
     setTimeout(() => {
       fetch(`${config.backendUrl}/api/historicalData/?aggregationInterval=0`)
         .then((response) => {
-          debugger;
           return response.json()
         })
         .then((responseTemplate: IResponseTemplate<IHistoricalData>) => {
-          debugger;
-          dispatch({ type: historicalActions.SET_HISTORICAL_DATA , payload: responseTemplate.Content });
+          //dispatch({ type: historicalActions.SET_HISTORICAL_DATA, payload: responseTemplate.Content });
+          setHistoricalData(responseTemplate.Content);
         })
         .catch((error) => {
-          debugger;
+
           dispatch({ type: errorActions.SET_ERROR, payload: error });
         });
     }, 2000);
@@ -45,10 +44,10 @@ const Historical = () => {
     return (
       <>
           <div>
-            <p>$`Close: {historicalData.Close}`</p>
-            <p>$`Open: {historicalData.Open}`</p>
-            <p>$`Daily High: {historicalData.DailyHigh}`</p>
-            <p>$`Daily Low: {historicalData.DailyLow}`</p>
+            <p>Close: {historicalData.Close}</p>
+            <p>Open: {historicalData.Open}</p>
+            <p>Daily High: {historicalData.DailyHigh}</p>
+            <p>Daily Low: {historicalData.DailyLow}</p>
           </div>
       </>
     );
