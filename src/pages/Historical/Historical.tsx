@@ -60,7 +60,7 @@ const Historical = () => {
       <div>
         <p>Error Code: {responseTemplateErrors.ErrorCode}</p>
         <p>Error Message: {responseTemplateErrors.Message}</p>
-        {responseTemplateErrors?.Details?.map(error => (<p>error</p>))}
+        {responseTemplateErrors?.Details?.map(error => (<p>{error}</p>))}
       </div>)
   }
 
